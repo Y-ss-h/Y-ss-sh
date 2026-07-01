@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国旅游人格测试 - 发现你的专属旅行目的地</title>
+<style>
+/* ========== CSS 变量与全局 ========== */
+:root {
+  --primary: #e8453c;
+  --primary-dark: #c0392b;
+  --accent: #f0a500;
+  --bg: #fdf6f0;
+  --card: #ffffff;
+  --text: #2d2d2d;
+  --text-light: #6b6b6b;
+  --border: #e8d5c4;
+  --shadow: 0 4px 20px rgba(0,0,0,.08);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,.12);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: .3s cubic-bezier(.4,0,.2,1);
+  --font: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: var(--font);
+  background: linear-gradient(135deg, #fdf6f0 0%, #fef5e7 50%, #fef9f4 100%);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ========== 背景装饰 ========== */
+.bg-decoration {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.bg-decoration::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(232,69,60,.05) 0%, transparent 70%);
+  top: -200px; right: -200px;
+  border-radius: 50%;
+}
+.bg-decoration::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(240,165,0,.05) 0%, transparent 70%);
+  bottom: -150px; left: -150px;
+  border-radius: 50%;
+}
+
+/* ========== 主容器 ========== */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========== 页面头部 ========== */
+.header {
+  text-align: center;
+  padding: 30px 0 10px;
+}
+.header .logo {
+  font-size: 48px;
+  margin-bottom: 8px;
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), #f06030);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+.header .subtitle {
+  color: var(--text-light);
+  font-size: .95rem;
+}
+
+/* ========== 进度条 ========== */
+.progress-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  margin: 16px 0 28px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 3px;
+  transition: width .5s ease;
+}
+
+/* ========== 卡片 ========== */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px 28px;
+  transition: var(--transition);
+}
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* ========== 欢迎页 ========== */
+.welcome-icon {
+  font-size: 80px;
+  text-align: center;
+  margin-bottom: 16px;
+  animation: float 3s ease-in-out infinite;
+}
+.welcome-desc {
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 28px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.feature-item {
+  text-align: center;
+  padding: 16px 8px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+.feature-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.feature-item .icon {
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+.feature-item .label {
+  font-size: .85rem;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+/* ========== 按钮 ========== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 36px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font);
+  letter-spacing: .5px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #d9362e);
+  color: #fff;
+  width: 100%;
+  font-size: 1.15rem;
+  padding: 16px 36px;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(232,69,60,.35);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+.btn-outline:hover {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-sm {
+  padding: 8px 20px;
+  font-size: .9rem;
+}
+
+/* ========== 选项按钮 ========== */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  font-family: var(--font);
+  color: var(--text);
+}
+.option-btn:hover {
+  border-color: var(--primary);
+  background: #fff5f5;
+  transform: translateX(4px);
+}
+.option-btn.selected {
+  border-color: var(--primary);
+  background: #fef2f1;
+  box-shadow: 0 0 0 3px rgba(232,69,60,.15);
+}
+.option-btn .option-index {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: .85rem;
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+.option-btn.selected .option-index {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ========== 问题 ========== */
+.question-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.question-number {
+  font-size: .8rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* ========== 结果页 ========== */
+.result-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.result-header .emoji {
+  font-size: 72px;
+  animation: popIn .6s cubic-bezier(.68,-.55,.265,1.55);
+}
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.result-header h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 8px 0 4px;
+}
+
+/* ========== 人格类型卡片 ========== */
+.personality-card {
+  background: linear-gradient(135deg, #fef2f1, #fff8f0);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  border: 2px solid #fde0dd;
+  animation: slideUp .5s ease;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.personality-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.personality-emoji {
+  font-size: 48px;
+  flex-shrink: 0;
+}
+.personality-header h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+.personality-header p {
+  font-size: .9rem;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+/* ========== 维度可视化条 ========== */
+.dimension-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dim-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dim-label {
+  width: 100px;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: right;
+  flex-shrink: 0;
+}
+.dim-bar-track {
+  flex: 1;
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.dim-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s cubic-bezier(.4,0,.2,1);
+}
+.dim-val {
+  width: 28px;
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+
+/* ========== 分隔标题 ========== */
+.section-title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 20px 0 12px;
+  color: var(--text);
+}
+.section-title span {
+  background: var(--bg);
+  padding: 6px 18px;
+  border-radius: 50px;
+  border: 2px solid var(--border);
+}
+
+/* ========== 省份排名 ========== */
+.rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 2px solid transparent;
+  position: relative;
+}
+.rank-item:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow);
+  transform: translateX(4px);
+}
+.rank-item.expanded {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lg);
+}
+.rank-badge {
+  font-size: 1.2rem;
+  font-weight: 900;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.rank-1 { background: #ffd700; color: #7b5b00; }
+.rank-2 { background: #c0c0c0; color: #555; }
+.rank-3 { background: #cd7f32; color: #fff; }
+.rank-other { background: #f0f0f0; color: #888; }
+.rank-info { flex: 1; }
+.rank-info .province-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.rank-info .province-vibe {
+  font-size: .82rem;
+  color: var(--text-light);
+}
+.rank-score {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--primary);
+  text-align: right;
+  line-height: 1.2;
+}
+.rank-arrow {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  transition: transform .3s;
+  flex-shrink: 0;
+}
+.rank-item.expanded .rank-arrow {
+  transform: rotate(180deg);
+}
+
+/* ========== 景点详情 ========== */
+.spot-detail {
+  display: none;
+  padding: 0 20px 20px;
+  margin-top: -4px;
+  background: #fefcf9;
+  border-radius: 0 0 var(--radius) var(--radius);
+  border: 2px solid var(--primary);
+  border-top: none;
+  animation: slideDown .4s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.spot-desc {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--primary);
+}
+.spot-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.spot-card:last-child { border-bottom: none; }
+.spot-icon { font-size: 32px; flex-shrink: 0; }
+.spot-info h4 { font-weight: 700; font-size: 1rem; margin-bottom: 2px; }
+.spot-info p { font-size: .88rem; color: var(--text-light); line-height: 1.5; }
+
+/* ========== 景点导航地址 ========== */
+.spot-nav {
+  margin-top: 8px;
+}
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  border: 1px solid #a5d6a7;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: .82rem;
+  color: #2e7d32;
+  transition: var(--transition);
+  font-weight: 500;
+}
+.nav-link:hover {
+  background: linear-gradient(135deg, #c8e6c9, #dcedc8);
+  border-color: #66bb6a;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(46,125,50,.2);
+}
+.nav-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.nav-text {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nav-arrow {
+  font-size: .75rem;
+  opacity: .7;
+  flex-shrink: 0;
+}
+
+.province-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.meta-tag {
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: .78rem;
+  font-weight: 600;
+  background: #fef2f1;
+  color: var(--primary);
+}
+.meta-tag.best-season {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+.meta-tag.cuisine {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+/* ========== 区域筛选 ========== */
+.region-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  justify-content: center;
+}
+.region-btn {
+  padding: 6px 16px;
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  background: var(--card);
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font);
+  color: var(--text-light);
+}
+.region-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.region-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* ========== 操作栏 ========== */
+.action-bar {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 600px) {
+  .container { padding: 12px; }
+  .card { padding: 20px 16px; }
+  .feature-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .header h1 { font-size: 1.5rem; }
+  .option-btn { padding: 12px 14px; font-size: .92rem; }
+  .rank-item { padding: 12px 14px; }
+  .dim-label { width: 70px; font-size: .75rem; }
+  .personality-emoji { font-size: 36px; }
+  .personality-header h3 { font-size: 1.1rem; }
+}
+
+/* ========== 显示/隐藏/动画 ========== */
+.hidden { display: none !important; }
+.fade-in { animation: fadeIn .5s ease; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-decoration"></div>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">✈️</div>
+    <h1>中国旅游人格测试</h1>
+    <p class="subtitle">10道趣味测试 · 34省景点匹配 · 发现你的命中注定</p>
+  </div>
+
+  <div class="progress-bar-wrap" id="progressWrap">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <!-- ====== 欢迎页 ====== -->
+  <div class="card fade-in" id="welcomeScreen">
+    <div class="welcome-icon">🗺️</div>
+    <p class="welcome-desc">
+      中国34个省级行政区各不相同——<br>
+      从雪域高原到热带海岛，从千年古都到未来都市——<br>
+      哪一处才是你<span style="color:var(--primary);font-weight:700;">命中注定</span>的旅行目的地？
+    </p>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="icon">🎯</div>
+        <div class="label">人格匹配</div>
+      </div>
+      <div class="feature-item">
+        <div class="icon">🏯</div>
+        <div class="label">景点推荐</div>
+      </div>
+      <div class="feature-item">
+        <div class="icon">🍜</div>
+        <div class="label">美食攻略</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="startQuiz()">
+      🚀 开始测试（10题·约2分钟）
+    </button>
+    <button class="btn btn-outline" onclick="showAllProvinces()" style="width:100%;margin-top:10px;">
+      📋 直接浏览全部34省景点
+    </button>
+  </div>
+
+  <!-- ====== 测试页 ====== -->
+  <div class="card hidden fade-in" id="quizScreen">
+    <div class="question-number" id="questionCounter">第 1 / 10 题</div>
+    <div class="question-title" id="questionTitle"></div>
+    <div class="options-list" id="optionsList"></div>
+    <div class="nav-buttons">
+      <button class="btn btn-outline btn-sm hidden" id="prevBtn" onclick="prevQuestion()">← 上一题</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary btn-sm" id="nextBtn" onclick="nextQuestion()" style="width:auto;padding:10px 28px;">下一题 →</button>
+    </div>
+    <p style="text-align:center;color:var(--text-light);font-size:.75rem;margin-top:12px;">
+      💡 按数字键 1-4 或字母 A-D 快速选择
+    </p>
+  </div>
+
+  <!-- ====== 结果页 ====== -->
+  <div class="hidden fade-in" id="resultScreen">
+    <div class="card">
+      <div class="result-header">
+        <div class="emoji">🎉</div>
+        <h2>你的专属旅行目的</h2>
+        <p style="color:var(--text-light);margin-bottom:16px;">
+          根据你的旅行人格，以下是匹配度最高的 <strong>5个省份</strong>
+        </p>
+      </div>
+      <div class="rank-list" id="rankList"></div>
+    </div>
+  </div>
+
+  <!-- ====== 全部省份页 ====== -->
+  <div class="hidden fade-in" id="allProvincesScreen">
+    <div class="card">
+      <div class="result-header">
+        <div class="emoji">🇨🇳</div>
+        <h2>全国34省特色景点总览</h2>
+        <p style="color:var(--text-light);">点击省份展开查看景点详情与美食攻略</p>
+      </div>
+      <div class="rank-list" id="allProvinceList"></div>
+      <button class="btn btn-outline" onclick="backToResult()" style="width:100%;margin-top:12px;">← 返回推荐结果</button>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
